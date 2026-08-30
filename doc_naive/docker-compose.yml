@@ -1,0 +1,16 @@
+# NOTE: Running multiple approach folders at once requires distinct host
+# ports. Change the left side of "5432:5432" (e.g. "5433:5432") per folder.
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: dc
+      POSTGRES_PASSWORD: dc
+      POSTGRES_DB: dc_doc_naive
+    ports:
+      - "5432:5432"
+    volumes:
+      - doc_naive_pgdata:/var/lib/postgresql/data
+
+volumes:
+  doc_naive_pgdata:

@@ -1,0 +1,23 @@
+# Postgres + pgvector backing store for the lucid_dc approach.
+# NOTE: running multiple approach folders at once requires distinct
+# host ports — change the "5432:5432" host side (e.g. "5435:5432")
+# per folder to avoid collisions.
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: dc
+      POSTGRES_PASSWORD: dc
+      POSTGRES_DB: dc_lucid
+    ports:
+      - "5432:5432"
+    volumes:
+      - lucid_dc_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dc -d dc_lucid"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  lucid_dc_pgdata:

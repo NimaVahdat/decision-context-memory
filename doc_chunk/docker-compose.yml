@@ -1,0 +1,17 @@
+# Postgres + pgvector for the doc_chunk approach.
+# NOTE: running multiple approach folders at once requires distinct
+# host ports — change "5432:5432" below (e.g. "5433:5432") per folder.
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: dc
+      POSTGRES_PASSWORD: dc
+      POSTGRES_DB: dc_doc_chunk
+    ports:
+      - "5432:5432"
+    volumes:
+      - doc_chunk_pgdata:/var/lib/postgresql/data
+
+volumes:
+  doc_chunk_pgdata:

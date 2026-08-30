@@ -1,0 +1,58 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "doc_chunk"
+version = "0.1.0"
+description = "Chunked document Decision Context memory approach"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "openai>=1.75.0",
+    "pydantic>=2.0",
+    "pydantic-settings>=2.12.0",
+    "pyyaml>=6.0",
+    "sqlalchemy[asyncio]>=2.0.0",
+    "asyncpg>=0.30.0",
+    "pgvector>=0.3.0",
+]
+
+[dependency-groups]
+dev = [
+    "aiosqlite>=0.22.1",
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.6",
+    "mypy>=1.10",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["doc_chunk"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "UP", "B", "SIM", "RUF"]
+# E501 long lines; B008 call-in-default; B023 loop binding; B905 zip strict;
+# SIM108 ternary. B027/B007/RUF002/RUF005 are style nits in the reference
+# implementation (optional-override ABC methods, intentional unused loop keys,
+# unicode in docstrings, list-concat) and are left as written.
+ignore = ["E501", "B008", "B023", "B905", "SIM108", "UP042", "B027", "B007", "RUF002", "RUF005"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["doc_chunk"]
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+warn_unused_configs = true
+# These codes fire only on the verbatim reference implementation: dynamically
+# set private attrs, SQLAlchemy Select[...] typing, and ABC signature variance.
+# They are exercised at runtime, not through static types.
+disable_error_code = [
+    "attr-defined", "override", "list-item",
+    "index", "return-value", "assignment", "arg-type",
+]

@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main]
+
+jobs:
+  # Cheap, dependency-free guard: each approach folder must stay decoupled
+  # (no dc_approaches imports, no cross-folder package imports).
+  decouple:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Decoupling check
+        run: make decouple-check
+
+  # Lint, type-check and test each approach independently. The matrix keeps
+  # them isolated — one folder's failure doesn't mask the others.
+  lint-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        approach: [doc_naive, doc_chunk, hybrid_raw, lucid_dc, forge_dc]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Install dependencies
+        working-directory: ${{ matrix.approach }}
+        run: uv sync
+
+      - name: Lint check
+        working-directory: ${{ matrix.approach }}
+        run: uv run ruff check .
+
+      - name: Type check
+        working-directory: ${{ matrix.approach }}
+        run: uv run mypy ${{ matrix.approach }}
+
+      - name: Run tests
+        working-directory: ${{ matrix.approach }}
+        run: uv run pytest
