@@ -67,3 +67,28 @@ asyncio.run(main())
 - Python ≥ 3.12, `OPENAI_API_KEY` (embeddings + a strong model for compilation).
 - Postgres with the `vector` extension (bundled `docker-compose.yml`). Tables are
   created on `initialize()`.
+
+## Citation
+
+`forge_dc` is the final stage of the five-stage progression and the paper’s headline system in **[Decision Context: Persistent Behavioral Learning for
+AI Agents](https://arxiv.org/abs/2611.08644)** (NeurIPS 2026 PALM workshop). If
+you use it, please cite:
+
+```bibtex
+@misc{vahdat2026decisioncontext,
+  title         = {Decision Context: Persistent Behavioral Learning for AI Agents},
+  author        = {Nima Vahdat and Pashootan Vaezipoor},
+  year          = {2026},
+  eprint        = {2611.08644},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.AI},
+  note          = {NeurIPS 2026 Workshop on Personalized, Aligned, Long-Term Memory for AI Systems (PALM)},
+  url           = {https://arxiv.org/abs/2611.08644}
+}
+```
+
+- Paper: [arXiv:2611.08644](https://arxiv.org/abs/2611.08644)
+- Workshop version: [OpenReview](https://openreview.net/forum?id=7XhMLOsQoA)
+  (NeurIPS 2026 PALM workshop, non-archival)
+- All five approaches: [`decision-context-memory`](https://github.com/NimaVahdat/decision-context-memory)
+- Benchmark: [`decision-context-benchmark`](https://github.com/NimaVahdat/decision-context-benchmark)
