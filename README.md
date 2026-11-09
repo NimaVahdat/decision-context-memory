@@ -1,5 +1,10 @@
 # Decision Context Memory
 
+Reference implementations for the paper **[Decision Context: Persistent
+Behavioral Learning for AI Agents](https://arxiv.org/abs/2611.08644)** (NeurIPS
+2026 PALM workshop). The benchmark they are evaluated on lives in
+[`decision-context-benchmark`](https://github.com/NimaVahdat/decision-context-benchmark).
+
 Behavioral memory for LLM agents. Each approach here lets an agent **learn from
 past corrections** — capture what happened on previous runs (and how a human
 corrected it), then surface the right guidance before the next run so the agent
@@ -19,6 +24,10 @@ works on its own.
 | [`hybrid_raw`](hybrid_raw/) | Store each run as a small graph of decision nodes, evidence, and edges; retrieve precedents and surface the raw corrections. | Postgres + pgvector |
 | [`lucid_dc`](lucid_dc/) | Hybrid capture plus a consolidation pass where an LLM reviews the run's own outcomes and writes autonomously-learned directives. | Postgres + pgvector |
 | [`forge_dc`](forge_dc/) | Hybrid capture plus rule compilation: a strong LLM turns corrections into strict, reusable `RULE` directives and injects only those. | Postgres + pgvector |
+
+The five folders are the paper's five-stage progression: on DC-Bench, compliance
+runs from 55% with naive retrieval (`doc_naive`) to 95% with compiled `RULE`
+directives (`forge_dc`), while injecting roughly 10x fewer tokens per query.
 
 (The paper also benchmarks two external products, `mem0` and `Zep`. They are not
 part of this repo because they aren't ours.)
@@ -87,3 +96,25 @@ no folder imports the legacy `dc_approaches` package or any other approach's
 package, so each folder stays copy-and-go. CI (`.github/workflows/ci.yml`) runs
 the decoupling guard once and then lints, type-checks, and tests each folder as
 an independent matrix job.
+
+## Citation
+
+If you use this code, please cite the paper:
+
+```bibtex
+@misc{vahdat2026decisioncontext,
+  title         = {Decision Context: Persistent Behavioral Learning for AI Agents},
+  author        = {Nima Vahdat and Pashootan Vaezipoor},
+  year          = {2026},
+  eprint        = {2611.08644},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.AI},
+  note          = {NeurIPS 2026 Workshop on Personalized, Aligned, Long-Term Memory for AI Systems (PALM)},
+  url           = {https://arxiv.org/abs/2611.08644}
+}
+```
+
+- Paper: [arXiv:2611.08644](https://arxiv.org/abs/2611.08644)
+- Workshop version: [OpenReview](https://openreview.net/forum?id=7XhMLOsQoA)
+  (NeurIPS 2026 PALM workshop, non-archival)
+- Benchmark: [`decision-context-benchmark`](https://github.com/NimaVahdat/decision-context-benchmark)
